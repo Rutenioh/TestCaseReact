@@ -1,4 +1,6 @@
 import * as React from 'react'
+import {Parametro} from '../model/parametro'
+import {product} from '../api/productoCartesiano'
 
 interface Props {
     
@@ -9,6 +11,7 @@ export const Panel :React.StatelessComponent<Props>= (props) => {
     const[paramValues, setParamValues] = React.useState([]) 
     const[paramValue, setParamValue] = React.useState('')
     const[paramName, setParamName] = React.useState('')
+    const[parametros, setParametros] = React.useState<Parametro[]>([])
 
     const onValueSubmit = () => {
         if (!paramValues.includes(paramValue) && paramValue !== '') {
@@ -16,8 +19,34 @@ export const Panel :React.StatelessComponent<Props>= (props) => {
                 ...paramValues,
                 paramValue
             ])
+            setParamValue('')
         }
    }
+
+   const onGenerateSubmit = () => {
+       let listParametros = []
+       parametros.forEach(parametro => {
+           listParametros.push(parametro.values)
+       })
+
+       const result = product(...listParametros)
+
+       console.log (result)
+   }
+
+   const onParamSubmit = () => {
+        setParamName(paramName)
+        
+        setParametros([
+            ...parametros,
+            {
+                name: paramName,
+                values: paramValues
+            }
+        ])
+        setParamValues([])
+        setParamName('')
+    }
 
     const onNameChange =(event: React.ChangeEvent<HTMLInputElement>) => {
         setParamName(event.target.value)
@@ -39,6 +68,15 @@ export const Panel :React.StatelessComponent<Props>= (props) => {
                     (<li key={value}>{value}</li>)
                     )}
             </div>
+            <button onClick={onParamSubmit}>Añadir Parámetro</button>
+            <div>
+                {parametros.map(parametro=> 
+                    (<li key={parametro.name}>{parametro.name}: {parametro.values.map(value=>(
+                        <div key={value}>{value}</div>
+                    ))}</li>)
+                    )}
+            </div>
+            <button onClick={onGenerateSubmit}>Generar casos</button>
         </>
     )
 }

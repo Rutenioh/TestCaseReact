@@ -16,12 +16,7 @@ export const getMembersCollection = (): Promise<Member[]> => {
               id: 4374977,
               login: "Nasdan",
               avatar_url: "https://avatars.githubusercontent.com/u/4374977?v=3"
-            },
-            {
-                id: 525509,
-                login: "Rutenioh",
-                avatar_url: "https://avatars.githubusercontent.com/u/525509?v=3"
-              }
+            }
             
           ]),
         500

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {Member} from '../model/member'
-import { getMembersCollection } from '../api/memberApi'
+import { getMembersCollection } from '../api/memberApi.mock'
 import { MemberRow } from './memberRow'
 
 const useMembers = () => {
