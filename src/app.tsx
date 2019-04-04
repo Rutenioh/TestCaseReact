@@ -10,7 +10,6 @@ export const App = () => {
   return (
     <>
       <Panel/>
-      <MemberTable />
     </>
   );
 };

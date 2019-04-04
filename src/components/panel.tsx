@@ -6,12 +6,15 @@ interface Props {
     
 }
 
+
 export const Panel :React.StatelessComponent<Props>= (props) => {
 
     const[paramValues, setParamValues] = React.useState([]) 
     const[paramValue, setParamValue] = React.useState('')
     const[paramName, setParamName] = React.useState('')
     const[parametros, setParametros] = React.useState<Parametro[]>([])
+    const[testCases, setTestCases] = React.useState([])
+    
 
     const onValueSubmit = () => {
         if (!paramValues.includes(paramValue) && paramValue !== '') {
@@ -25,13 +28,15 @@ export const Panel :React.StatelessComponent<Props>= (props) => {
 
    const onGenerateSubmit = () => {
        let listParametros = []
+
        parametros.forEach(parametro => {
            listParametros.push(parametro.values)
        })
-
        const result = product(...listParametros)
 
-       console.log (result)
+       console.log(result)
+
+       setTestCases(result)
    }
 
    const onParamSubmit = () => {
@@ -77,6 +82,33 @@ export const Panel :React.StatelessComponent<Props>= (props) => {
                     )}
             </div>
             <button onClick={onGenerateSubmit}>Generar casos</button>
+            
+
+            <table>
+                <thead>
+                    <tr key='header'>
+                        {
+                            parametros.map(param => (
+                                <th>{param.name}</th>
+                            ))
+                        }
+                    </tr>
+                </thead>
+                <tbody>
+                {
+                    testCases.map(testCase => (
+                        <tr key={testCase}>
+                            {testCase.forEach(valor=> (
+                                <td>{valor}</td>
+                            ))}
+                        </tr>
+                    ))
+                }
+                </tbody>
+            </table>
+
+
+
         </>
     )
 }
