@@ -1,6 +1,7 @@
 import * as React from 'react'
 import { Parametro } from '../model/parametro'
 import { product } from '../api/productoCartesiano'
+import { ResultTable } from './resultTable';
 
 interface Props {
 
@@ -13,6 +14,7 @@ export const Panel: React.StatelessComponent<Props> = (props) => {
     const [paramName, setParamName] = React.useState('')
     const [parametros, setParametros] = React.useState<Parametro[]>([])
     const [testCases, setTestCases] = React.useState([])
+    const [cabeceras, setCabeceras] = React.useState([])
 
     const onValueSubmit = () => {
         if (!paramValues.includes(paramValue) && paramValue !== '') {
@@ -28,6 +30,7 @@ export const Panel: React.StatelessComponent<Props> = (props) => {
         let listParametros = []
         parametros.forEach(parametro => {
             listParametros.push(parametro.values)
+            cabeceras.push(parametro.name)
         })
 
         const result = product(...listParametros)
@@ -84,26 +87,8 @@ export const Panel: React.StatelessComponent<Props> = (props) => {
                     </span>
                 </div>
                 <button onClick={onGenerateSubmit}>Generar casos</button>
-                <table>
-                    <thead>
-                        <tr>
-                            {
-                                parametros.map(param => (
-                                    <th>{param.name}</th>
-                                ))
-                            }
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {
-                            testCases.map(testCase => (
-                                <tr>{testCase.map(value => (
-                                    <td>{value}</td>
-                                ))}</tr>
-                            ))
-                        }
-                    </tbody>
-                </table>
+                <ResultTable cabeceras={cabeceras} testCases={testCases}/>
+
             </div>
         </>
     )
