@@ -1,16 +1,17 @@
 import * as React from 'react'
 import { Parametro } from '../model/parametro'
+import { TestCaseRow } from './testCaseRow';
 
 interface Props {
-	cabeceras: Parametro[]
+	cabeceras: string[]
 	testCases: any[]
 }
 
-export const ResultTable: React.StatelessComponent<Props> = (props :Props) => {
+export const ResultTable: React.StatelessComponent<Props> = (props: Props) => {
 
 	return (
 		<>
-			<table>
+			<table className='displayNone'>
 				<thead>
 					<tr>
 						{
@@ -23,9 +24,7 @@ export const ResultTable: React.StatelessComponent<Props> = (props :Props) => {
 				<tbody>
 					{
 						props.testCases.map(testCase => (
-							<tr>{testCase.map(value => (
-								<td>{value}</td>
-							))}</tr>
+							<TestCaseRow testCase={testCase} />
 						))
 					}
 				</tbody>

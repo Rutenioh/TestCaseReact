@@ -14,7 +14,8 @@ export const Panel: React.StatelessComponent<Props> = (props) => {
     const [paramName, setParamName] = React.useState('')
     const [parametros, setParametros] = React.useState<Parametro[]>([])
     const [testCases, setTestCases] = React.useState([])
-    const [cabeceras] = React.useState([])
+    const [cabeceras, setCabeceras] = React.useState([])
+
 
     const onValueSubmit = () => {
         if (!paramValues.includes(paramValue) && paramValue !== '') {
@@ -28,15 +29,27 @@ export const Panel: React.StatelessComponent<Props> = (props) => {
 
     const onGenerateSubmit = () => {
         let listParametros = []
-        parametros.forEach(parametro => {
-            listParametros.push(parametro.values)
-            cabeceras.push(parametro.name)
-        })
+        if (parametros.length > 0) {
 
-        const result = product(...listParametros)
+            if (cabeceras.length == 0) {
+                cabeceras.push('Eliminar caso')
+            }
+            parametros.forEach(parametro => {
+                listParametros.push(parametro.values)
 
-        console.log(result)
-        setTestCases(result)
+                if (!cabeceras.includes(parametro.name)) {
+                    setCabeceras([
+                        ...cabeceras,
+                        parametro.name
+                    ])
+                }
+            })
+
+            const result = product(...listParametros)
+
+            console.log(result)
+            setTestCases(result)
+        }
     }
 
     const onParamSubmit = () => {
@@ -87,7 +100,7 @@ export const Panel: React.StatelessComponent<Props> = (props) => {
                     </span>
                 </div>
                 <button onClick={onGenerateSubmit}>Generar casos</button>
-                <ResultTable cabeceras={cabeceras} testCases={testCases}/>
+                <ResultTable cabeceras={cabeceras} testCases={testCases} />
 
             </div>
         </>
