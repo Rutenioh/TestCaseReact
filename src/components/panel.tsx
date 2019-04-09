@@ -3,11 +3,7 @@ import { Parametro } from '../model/parametro'
 import { product } from '../api/productoCartesiano'
 import { ResultTable } from './resultTable';
 
-interface Props {
-
-}
-
-export const Panel: React.StatelessComponent<Props> = (props) => {
+export const Panel: React.StatelessComponent = () => {
 
     const [paramValues, setParamValues] = React.useState([])
     const [paramValue, setParamValue] = React.useState('')
