@@ -14,7 +14,7 @@ export const Panel: React.StatelessComponent<Props> = (props) => {
     const [paramName, setParamName] = React.useState('')
     const [parametros, setParametros] = React.useState<Parametro[]>([])
     const [testCases, setTestCases] = React.useState([])
-    const [cabeceras, setCabeceras] = React.useState([])
+    const [cabeceras] = React.useState([])
 
     const onValueSubmit = () => {
         if (!paramValues.includes(paramValue) && paramValue !== '') {
