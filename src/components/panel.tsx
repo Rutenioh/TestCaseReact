@@ -1,20 +1,17 @@
 import * as React from 'react'
-import {Parametro} from '../model/parametro'
-import {product} from '../api/productoCartesiano'
+import { Parametro } from '../model/parametro'
+import { product } from '../api/productoCartesiano'
+import { ResultTable } from './resultTable';
 
-interface Props {
-    
-}
+export const Panel: React.StatelessComponent = () => {
 
+    const [paramValues, setParamValues] = React.useState([])
+    const [paramValue, setParamValue] = React.useState('')
+    const [paramName, setParamName] = React.useState('')
+    const [parametros, setParametros] = React.useState<Parametro[]>([])
+    const [testCases, setTestCases] = React.useState([])
+    const [cabeceras, setCabeceras] = React.useState([])
 
-export const Panel :React.StatelessComponent<Props>= (props) => {
-
-    const[paramValues, setParamValues] = React.useState([]) 
-    const[paramValue, setParamValue] = React.useState('')
-    const[paramName, setParamName] = React.useState('')
-    const[parametros, setParametros] = React.useState<Parametro[]>([])
-    const[testCases, setTestCases] = React.useState([])
-    
 
     const onValueSubmit = () => {
         if (!paramValues.includes(paramValue) && paramValue !== '') {
@@ -24,24 +21,33 @@ export const Panel :React.StatelessComponent<Props>= (props) => {
             ])
             setParamValue('')
         }
-   }
+    }
 
-   const onGenerateSubmit = () => {
-       let listParametros = []
+    const onGenerateSubmit = () => {
+        let listParametros = []
+        if (parametros.length > 0) {
 
-       parametros.forEach(parametro => {
-           listParametros.push(parametro.values)
-       })
-       const result = product(...listParametros)
+            if (cabeceras.length == 0) {
+                cabeceras.push('Eliminar caso')
+            }
+            parametros.forEach(parametro => {
+                listParametros.push(parametro.values)
 
-       console.log(result)
+                if (!cabeceras.includes(parametro.name)) {
+                    cabeceras.push(parametro.name)
+                }
+            })
 
-       setTestCases(result)
-   }
+            const result = product(...listParametros)
 
-   const onParamSubmit = () => {
+            console.log(result)
+            setTestCases(result)
+        }
+    }
+
+    const onParamSubmit = () => {
         setParamName(paramName)
-        
+
         setParametros([
             ...parametros,
             {
@@ -53,62 +59,43 @@ export const Panel :React.StatelessComponent<Props>= (props) => {
         setParamName('')
     }
 
-    const onNameChange =(event: React.ChangeEvent<HTMLInputElement>) => {
+    const onNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setParamName(event.target.value)
     }
 
-    const onValueChange =(event: React.ChangeEvent<HTMLInputElement>) => {
+    const onValueChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setParamValue(event.target.value)
     }
 
     return (
         <>
-            <label>Parámetro:</label>
-            <input onChange={onNameChange} value={paramName} />
-            <label>Valor:</label>
-            <input onChange={onValueChange} value={paramValue} />
-            <button onClick={onValueSubmit}>Añadir valor</button>
-            <div>
-                {paramValues.map(value=> 
-                    (<li key={value}>{value}</li>)
+            <div id="panel">
+                <span className="add_param">
+                    <label>Parámetro:</label>
+                    <input onChange={onNameChange} value={paramName} />
+                    <label>Valor:</label>
+                    <input onChange={onValueChange} value={paramValue} />
+                    <button onClick={onValueSubmit}>Añadir valor</button>
+                </span>
+                <span>
+                    {paramValues.map(value =>
+                        (<li key={value}>{value}</li>)
                     )}
+                </span>
+                <div id="param">
+                    <button onClick={onParamSubmit}>Añadir Parámetro</button>
+                    <span>
+                        {parametros.map(parametro => 
+                            (<div className="parametro"> {parametro.name}: {parametro.values.map(value => (
+                                <span className="valor_parametro">{value}</span>
+                            ))}</div>)
+                        )}
+                    </span>
+                </div>
+                <button onClick={onGenerateSubmit}>Generar casos</button>
+                <ResultTable cabeceras={cabeceras} testCases={testCases} />
+
             </div>
-            <button onClick={onParamSubmit}>Añadir Parámetro</button>
-            <div>
-                {parametros.map(parametro=> 
-                    (<li key={parametro.name}>{parametro.name}: {parametro.values.map(value=>(
-                        <div key={value}>{value}</div>
-                    ))}</li>)
-                    )}
-            </div>
-            <button onClick={onGenerateSubmit}>Generar casos</button>
-            
-
-            <table>
-                <thead>
-                    <tr key='header'>
-                        {
-                            parametros.map(param => (
-                                <th>{param.name}</th>
-                            ))
-                        }
-                    </tr>
-                </thead>
-                <tbody>
-                {
-                    testCases.map(testCase => (
-                        <tr key={testCase}>
-                            {testCase.forEach(valor=> (
-                                <td>{valor}</td>
-                            ))}
-                        </tr>
-                    ))
-                }
-                </tbody>
-            </table>
-
-
-
         </>
     )
 }

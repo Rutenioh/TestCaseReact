@@ -5,7 +5,7 @@ import {
 import { Panel } from "./components/panel";
 
 export const App = () => {
-  
+
 
   return (
     <>
