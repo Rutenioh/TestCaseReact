@@ -9,6 +9,10 @@ interface Props {
 
 export const ResultTable: React.StatelessComponent<Props> = (props: Props) => {
 
+	const deleteRow = (index :number) => {
+		props.testCases.splice(index, 1);
+	}
+
 	return (
 		<>
 			<table className='result_table'>
@@ -24,7 +28,7 @@ export const ResultTable: React.StatelessComponent<Props> = (props: Props) => {
 				<tbody className='tbody'>
 					{
 						props.testCases.map(testCase => (
-							<TestCaseRow testCase={testCase} />
+							<TestCaseRow onDeleteRow={deleteRow} testCase={testCase} />
 						))
 					}
 				</tbody>
