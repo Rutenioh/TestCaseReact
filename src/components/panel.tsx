@@ -92,7 +92,7 @@ export const Panel: React.StatelessComponent = () => {
                         )}
                     </span>
                 </div>
-                <button onClick={onGenerateSubmit}>Generar casos</button>
+                <button className="GenCasBtn" onClick={onGenerateSubmit}>Generar casos</button>
                 <ResultTable cabeceras={cabeceras} testCases={testCases} />
 
             </div>
